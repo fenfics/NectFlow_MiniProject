@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CreateAccountScreen extends StatelessWidget {
-  const CreateAccountScreen({super.key});
+class ForgotPasswordScreen extends StatelessWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class CreateAccountScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Create Account',
+                'Forgot Password',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -24,26 +24,7 @@ class CreateAccountScreen extends StatelessWidget {
               SizedBox(height: 20),
               TextField(
                 decoration: InputDecoration(
-                  hintText: 'Username',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Password',
+                  hintText: 'Enter your email',
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(),
@@ -52,7 +33,7 @@ class CreateAccountScreen extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
-                child: Text('Register'),
+                child: Text('Send Reset Link'),
               ),
               SizedBox(height: 10),
               TextButton(
