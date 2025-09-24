@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../app_colors.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
 
-  ForgotPasswordPage({super.key});
+  const ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,6 @@ class ForgotPasswordPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextField(
-                controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Enter your email',
                   border: OutlineInputBorder(),
@@ -30,12 +28,11 @@ class ForgotPasswordPage extends StatelessWidget {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {}, // TODO: forgot password logic
+                onPressed: () {}, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  minimumSize: Size(double.infinity, 50),
                 ),
-                child: Text('Send Reset Link', style: TextStyle(fontSize: 18)),
+                child: Text('Send Reset Link',style: TextStyle(fontSize: 18, color: AppColors.background)),
               ),
             ],
           ),

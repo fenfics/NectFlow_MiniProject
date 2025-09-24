@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 import '../app_colors.dart';
 import 'register_page.dart';
 import 'forgot_password_page.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Center(
-        child: SingleChildScrollView(
+        child: Padding(
           padding: EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -22,7 +21,6 @@ class LoginPage extends StatelessWidget {
               Text('WELCOME!', style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: AppColors.primary)),
               SizedBox(height: 40),
               TextField(
-                controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
@@ -31,7 +29,6 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
-                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -42,13 +39,13 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  
-                }, // TODO: login logic
+                   Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+                }, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  minimumSize: Size(double.infinity, 50),
+                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                 ),
-                child: Text('Login', style: TextStyle(fontSize: 18)),
+                child: Text('Login', style: TextStyle(fontSize: 18, color: AppColors.background),),
               ),
               SizedBox(height: 10),
               TextButton(
