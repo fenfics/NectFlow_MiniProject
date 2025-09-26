@@ -10,14 +10,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _buildingController = TextEditingController();
-  final TextEditingController _floorController = TextEditingController();
-  final TextEditingController _roomController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +27,6 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _firstNameController,
                     decoration: InputDecoration(
                       labelText: 'First Name',
                       border: const OutlineInputBorder(),
@@ -46,7 +37,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(width: 20),
                 Expanded(
                   child: TextField(
-                    controller: _lastNameController,
                     decoration: InputDecoration(
                       labelText: 'Last Name',
                       border: const OutlineInputBorder(),
@@ -58,7 +48,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _phoneController,
               decoration: InputDecoration(
                 labelText: 'Phone Number',
                 border: const OutlineInputBorder(),
@@ -67,7 +56,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
                 border: const OutlineInputBorder(),
@@ -76,7 +64,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
@@ -86,7 +73,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _buildingController,
               decoration: InputDecoration(
                 labelText: 'Building',
                 border: const OutlineInputBorder(),
@@ -95,7 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _floorController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Floor',
@@ -105,7 +90,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _roomController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Room Number',
@@ -116,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                // TODO: ส่งข้อมูลไปยัง backend / API
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const LoginPage()),
