@@ -10,7 +10,7 @@ class ForgotPasswordPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text('Forgot Password'),
+        title: Text('Forgot Password', style: TextStyle(color: AppColors.background),),
         backgroundColor: AppColors.primary,
       ),
       body: Center(

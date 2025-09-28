@@ -45,7 +45,6 @@ class ReportPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-
             Center(
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(

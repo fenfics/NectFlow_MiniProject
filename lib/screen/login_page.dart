@@ -39,6 +39,9 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Login Successful!!!")),
+                  );
                    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
                 }, 
                 style: ElevatedButton.styleFrom(

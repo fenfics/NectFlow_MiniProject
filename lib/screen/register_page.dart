@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nectflowproject/pages/login_page.dart';
+import 'package:nectflowproject/screen/login_page.dart';
 import '../app_colors.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -10,7 +10,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +99,9 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Register Successful!!!")),
+                  );
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const LoginPage()),

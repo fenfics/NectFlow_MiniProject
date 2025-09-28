@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
-import './messages_page.dart';
-import  './report_person_page.dart';
-import './report_issue_page.dart';
+import 'messages_page.dart';
+import  'report_person_page.dart';
+import 'report_issue_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("Home", style:  TextStyle(color: AppColors.background),),
         backgroundColor: AppColors.primary,
       ),
       body: Padding(
