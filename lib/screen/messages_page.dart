@@ -1,6 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'dart:async';
+// ignore_for_file: library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
@@ -33,17 +31,29 @@ class _MessagePageState extends State<MessagePage>
             onPressed: () {},
             icon: Icon(Icons.search, color: AppColors.background),
           ),
-          IconButton(
-            onPressed: () {},
+          PopupMenuButton<String>(
             icon: Icon(Icons.more_vert, color: AppColors.background),
+            onSelected: (value) {
+              print(value);
+            },
+            itemBuilder: (BuildContext contesxt) {
+              return [
+                PopupMenuItem(value: "New group", child: Text("New group")),
+                PopupMenuItem(
+                  value: "Starred messages",
+                  child: Text("Starred messages"),
+                ),
+                PopupMenuItem(value: "Settings", child: Text("Settings")),
+              ];
+            },
           ),
         ],
         bottom: TabBar(
           controller: _tabcontroller,
-          labelColor: AppColors.background, 
-          unselectedLabelColor: Colors.white70, 
-          indicatorColor: AppColors.background, 
-          indicatorSize: TabBarIndicatorSize.tab,  
+          labelColor: AppColors.background,
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: AppColors.background,
+          indicatorSize: TabBarIndicatorSize.tab,
           tabs: const [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(text: "Chats"),
@@ -55,11 +65,11 @@ class _MessagePageState extends State<MessagePage>
       body: TabBarView(
         controller: _tabcontroller,
         children: [
-         Text("Camera"),
-         Text("Chats"),
-         Text("Notification"),
-         Text("Calls"),
-      ],
+          Text("Camera"),
+          Text("Chats"),
+          Text("Notification"),
+          Text("Calls"),
+        ],
       ),
     );
   }
