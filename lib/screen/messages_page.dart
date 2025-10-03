@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
+import 'package:nectflowproject/pages/chatpages.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -66,7 +67,7 @@ class _MessagePageState extends State<MessagePage>
         controller: _tabcontroller,
         children: [
           Text("Camera"),
-          Text("Chats"),
+          Chatpage(),
           Text("Notification"),
           Text("Calls"),
         ],
