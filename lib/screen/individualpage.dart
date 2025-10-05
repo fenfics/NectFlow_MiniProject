@@ -1,5 +1,5 @@
-// ignore_for_file: avoid_print, sort_child_properties_last, sized_box_for_whitespace
-
+// ignore_for_file: avoid_print, sort_child_properties_last, sized_box_for_whitespace, unnecessary_null_comparison
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nectflowproject/app_colors.dart';
 import 'package:nectflowproject/model/chatmodel.dart';
@@ -13,6 +13,20 @@ class IndividualPage extends StatefulWidget {
 }
 
 class _IndividualPageState extends State<IndividualPage> {
+  bool show = false;
+  FocusNode focusnode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    focusnode.addListener(() {
+      if (focusnode.hasFocus) {
+        setState(() {
+          show = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,9 +56,7 @@ class _IndividualPageState extends State<IndividualPage> {
             ),
           ),
           title: InkWell(
-            onTap: () {
-              // ใส่ฟังก์ชันเปิดโปรไฟล์หรืออื่นๆ ถ้าต้องการ
-            },
+            onTap: () {},
             child: Container(
               margin: const EdgeInsets.all(5),
               child: Column(
@@ -104,47 +116,91 @@ class _IndividualPageState extends State<IndividualPage> {
             ListView(),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Row(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width-55,
-                    child: Card(
-                      margin: EdgeInsets.only(left: 2,right: 2,bottom: 8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      child: TextFormField(
-                        textAlignVertical: TextAlignVertical.center,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        minLines: 1,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Type a messages",
-                          prefixIcon: IconButton(onPressed: (){}, icon: Icon(Icons.emoji_emotions)),
-                          suffixIcon: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.attach_file)),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.camera_alt))
-                            ],
+                  Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width - 55,
+                        child: Card(
+                          margin: EdgeInsets.only(left: 2, right: 2, bottom: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          contentPadding: EdgeInsets.all(5)
+                          child: TextFormField(
+                            focusNode: focusnode,
+                            textAlignVertical: TextAlignVertical.center,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 5,
+                            minLines: 1,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Type a messages",
+                              prefixIcon: IconButton(
+                                onPressed: () {
+                                  if (focusnode != null && focusnode.hasFocus) {
+                                    focusnode.unfocus();
+                                    focusnode.canRequestFocus = false;
+                                  }
+                                  setState(() {
+                                    show = !show;
+                                  });
+                                },
+                                icon: Icon(Icons.emoji_emotions_outlined),
+                              ),
+                              suffixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.attach_file),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.camera_alt),
+                                  ),
+                                ],
+                              ),
+                              contentPadding: EdgeInsets.all(5),
+                            ),
+                          ),
                         ),
-                      )
                       ),
-                    ), 
-                  Padding(
-                    padding: const EdgeInsets.only(left: 2,right: 2,bottom: 8),
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: AppColors.accent,
-                      child: IconButton(onPressed: (){}, icon: Icon(Icons.mic,color: AppColors.background,)),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 2,
+                          right: 2,
+                          bottom: 8,
+                        ),
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: AppColors.accent,
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.mic, color: AppColors.background),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ]
+                  show ? emojiSelect() : Container(),
+                ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget emojiSelect() {
+    return EmojiPicker(
+      onEmojiSelected: (category, emoji) {
+        print(emoji);
+      },
+      config: const Config(
+        emojiViewConfig: EmojiViewConfig(emojiSizeMax: 32, columns: 7),
       ),
     );
   }
