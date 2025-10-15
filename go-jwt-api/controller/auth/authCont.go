@@ -36,19 +36,6 @@ func generateUserID() string {
 	return fmt.Sprintf("US%04d", userCount)
 }
 
-func getRoleID(roleName string) string {
-	switch roleName {
-	case "Admin":
-		return "RO0001"
-	case "Resident":
-		return "RO0002"
-	case "Manager":
-		return "RO0003"
-	default:
-		return "RO0002"
-	}
-}
-
 type RegisterBody struct {
 	DisplayName string `json:"display_name" binding:"required"`
 	FirstName   string `json:"first_name" binding:"required"`
@@ -57,12 +44,19 @@ type RegisterBody struct {
 	PhoneNumber string `json:"phone_number"`
 	Password    string `json:"password" binding:"required,min=6"`
 	ProfilePath string `json:"profile_path"`
+	RoleID      string `json:"role_id" binding:"required"`
+}
+
+type LoginBody struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,min=6"`
+	RoleID   string `json:"role_id" binding:"required"`
 }
 
 func Register(c *gin.Context) {
 	var input RegisterBody
 	if err := c.ShouldBindJSON(&input); err != nil {
-		fmt.Println("Binding error:", err) // เพิ่ม log
+		fmt.Println("Binding error:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -78,7 +72,9 @@ func Register(c *gin.Context) {
 	if err == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email already exists"})
 		return
-	} else if err != gorm.ErrRecordNotFound {
+	}
+	if err != nil && err != gorm.ErrRecordNotFound {
+		fmt.Println("Database error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -92,7 +88,7 @@ func Register(c *gin.Context) {
 
 	user := orm.User{
 		UserID:      generateUserID(),
-		RoleID:      getRoleID(input.DisplayName),
+		RoleID:      input.RoleID,
 		DisplayName: input.DisplayName,
 		FirstName:   input.FirstName,
 		LastName:    input.LastName,
@@ -120,6 +116,47 @@ func Register(c *gin.Context) {
 			"email":        user.Email,
 			"phone_number": user.PhoneNumber,
 			"created_date": user.CreatedDate,
+			"profile_path": user.ProfilePath,
+		},
+	})
+}
+
+func Login(c *gin.Context) {
+	var input LoginBody
+	if err := c.ShouldBindJSON(&input); err != nil {
+		fmt.Println("Binding error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user orm.User
+	err := orm.Db.Where("Email = ?", input.Email).Take(&user).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+			return
+		}
+		fmt.Println("Database error:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Login successful",
+		"user": gin.H{
+			"user_id":      user.UserID,
+			"role_id":      user.RoleID,
+			"display_name": user.DisplayName,
+			"first_name":   user.FirstName,
+			"last_name":    user.LastName,
+			"email":        user.Email,
+			"phone_number": user.PhoneNumber,
 			"profile_path": user.ProfilePath,
 		},
 	})

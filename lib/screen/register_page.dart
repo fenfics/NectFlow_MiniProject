@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:nectflowproject/screen/login_page.dart';
@@ -19,23 +19,33 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController displayNameController = TextEditingController(); // สำหรับ profile display name
+
+  String selectedRoleID = 'RO0002'; // default role
+
+  final Map<String, String> roles = {
+    "Admin": "RO0001",
+    "Resident": "RO0002",
+    "Manager": "RO0003",
+  };
 
   void registerUser() async {
-    var url = Uri.parse('http://localhost:8080/register'); 
+    var url = Uri.parse('http://localhost:8080/register');
 
     try {
       var response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-        "first_name": firstNameController.text,      
-        "last_name": lastNameController.text,     
-        "phone_number": phoneController.text,     
-        "email": emailController.text,
-        "password": passwordController.text,
-        "display_name": "Resident",                 
-        "profile_path": "",                         
-      }),
+          "first_name": firstNameController.text,
+          "last_name": lastNameController.text,
+          "phone_number": phoneController.text,
+          "email": emailController.text,
+          "password": passwordController.text,
+          "display_name": displayNameController.text, // ชื่อที่แสดงในโปรไฟล์
+          "role_id": selectedRoleID,                  // บทบาท
+          "profile_path": "",
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -75,6 +85,17 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
+            // Display Name
+            TextField(
+              controller: displayNameController,
+              decoration: InputDecoration(
+                labelText: 'Display Name',
+                border: const OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person, color: AppColors.accent),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // First Name & Last Name
             Row(
               children: [
                 Expanded(
@@ -101,6 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
             ),
             const SizedBox(height: 20),
+            // Phone
             TextField(
               controller: phoneController,
               decoration: InputDecoration(
@@ -110,6 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             const SizedBox(height: 20),
+            // Email
             TextField(
               controller: emailController,
               decoration: InputDecoration(
@@ -119,6 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             const SizedBox(height: 20),
+            // Password
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -126,6 +150,27 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelText: 'Password',
                 border: const OutlineInputBorder(),
                 prefixIcon: Icon(Icons.lock, color: AppColors.accent),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Role Dropdown
+            DropdownButtonFormField<String>(
+              value: selectedRoleID,
+              items: roles.entries.map((entry) {
+                return DropdownMenuItem<String>(
+                  value: entry.value, // RoleID
+                  child: Text(entry.key), // Role Name
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedRoleID = value!;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Select Role',
+                border: const OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person_outline, color: AppColors.accent),
               ),
             ),
             const SizedBox(height: 30),

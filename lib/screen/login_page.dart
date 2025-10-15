@@ -1,10 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import '../app_colors.dart';
 import 'register_page.dart';
-import 'forgot_password_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,18 +15,57 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? selectedRole; // เก็บค่าที่เลือก
+  String? selectedRole;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   final List<String> roles = ['Admin', 'Resident', 'Manager'];
+
+  Future<void> login() async {
+    if (selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a role!")),
+      );
+      return;
+    }
+
+    final url = Uri.parse('http://localhost:8080/login');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': emailController.text,
+          'password': passwordController.text,
+          'role_id': selectedRole,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login Successful ")),
+        );
+        Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+      } else {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login Failed: ${data['error']}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Failed: $e")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,8 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 20),
-              
-              // Dropdown สำหรับเลือก Role
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: 'Select Role',
@@ -76,55 +114,32 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
               ),
-
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (selectedRole == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Please select a role!")),
-                    );
-                    return;
-                  }
-                  // ทดสอบ login
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            "Login Successful as $selectedRole!!!")),
-                  );
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage()));
-                },
+                onPressed: login, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                 ),
                 child: Text(
                   'Login',
                   style: TextStyle(fontSize: 18, color: AppColors.background),
                 ),
               ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
-                },
-                child:
-                    Text('Forgot Password?', style: TextStyle(color: AppColors.secondary)),
-              ),
+             
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't have an account?", style: TextStyle(color: AppColors.darkGreen)),
+                  Text("Don't have an account?",
+                      style: TextStyle(color: AppColors.darkGreen)),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => RegisterPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => RegisterPage()));
                     },
-                    child: Text('Register', style: TextStyle(color: AppColors.accent)),
+                    child:
+                        Text('Register', style: TextStyle(color: AppColors.accent)),
                   ),
                 ],
               )

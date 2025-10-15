@@ -26,6 +26,7 @@ func main() {
 	}))
 
 	r.POST("/register", AuthController.Register)
+	r.POST("/login", AuthController.Login)
 
 	fmt.Println("Server running on :8080")
 	r.Run(":8080")
