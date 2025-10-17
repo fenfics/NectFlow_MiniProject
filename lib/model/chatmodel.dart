@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 
 class Chatmodel {
   String name;
-  Icon icon;
-  bool isGroup;
-  String time;
-  String currentMessage;
-  Chatmodel(
-    {required this.name,required this.icon,required this.time,required this.isGroup,required this.currentMessage}
-  );
+  Icon? icon;
+  bool? isGroup;
+  String? time;
+  String? currentMessage;
+  String? status;
+  bool select;
+  Chatmodel({
+    required this.name,
+    this.icon,
+    this.isGroup,
+    this.time,
+    this.currentMessage,
+    this.status,
+    this.select = false,
+  });
 }

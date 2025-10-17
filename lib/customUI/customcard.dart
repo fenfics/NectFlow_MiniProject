@@ -11,7 +11,12 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> IndividualPage(chatmodel: chatmodel,)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndividualPage(chatmodel: chatmodel),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -20,7 +25,7 @@ class CustomCard extends StatelessWidget {
               backgroundColor: AppColors.secondary,
               radius: 25,
               child: Icon(
-                chatmodel.icon.icon,
+                chatmodel.icon?.icon ?? Icons.person, 
                 color: AppColors.darkGreen,
                 size: 33,
               ),
@@ -37,12 +42,12 @@ class CustomCard extends StatelessWidget {
                 const Icon(Icons.done_all, size: 18),
                 const SizedBox(width: 3),
                 Text(
-                  chatmodel.currentMessage,
+                  chatmodel.currentMessage ?? '', 
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
             ),
-            trailing: Text(chatmodel.time),
+            trailing: Text(chatmodel.time ?? ''), 
           ),
           const Padding(
             padding: EdgeInsets.only(right: 20, left: 80),

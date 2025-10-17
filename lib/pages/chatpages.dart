@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:nectflowproject/customUI/customcard.dart';
 import 'package:nectflowproject/model/chatmodel.dart';
+import 'package:nectflowproject/screen/selectcontact.dart';
 import '../app_colors.dart';
 
 class Chatpage extends StatefulWidget {
@@ -44,13 +45,45 @@ class _ChatpageState extends State<Chatpage> {
         time: "18:35",
         isGroup: false,
         currentMessage: "hey what r u doin"),
+    Chatmodel(
+        name: "Wawa",
+        icon: Icon(Icons.person),
+        time: "4:00",
+        isGroup: false,
+        currentMessage: "Hi"),
+    Chatmodel(
+        name: "Developer G.3",
+        icon: Icon(Icons.groups),
+        time: "3:50",
+        isGroup: true,
+        currentMessage: "Hi everyone!!!"),
+    Chatmodel(
+        name: "Korn",
+        icon: Icon(Icons.person),
+        time: "3:50",
+        isGroup: false,
+        currentMessage: "Hi!!!!"),
+    Chatmodel(
+        name: "Developer G.4",
+        icon: Icon(Icons.groups),
+        time: "10:25",
+        isGroup: true,
+        currentMessage: "We need to fix sth"),
+    Chatmodel(
+        name: "Wannatalk with you",
+        icon: Icon(Icons.person),
+        time: "18:35",
+        isGroup: false,
+        currentMessage: "hey what r u doin"),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (builder)=>SelectContact()));
+        },
         child: Icon(Icons.chat_sharp, color: AppColors.primary),
       ),
       body: ListView.builder(

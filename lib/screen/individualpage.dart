@@ -47,7 +47,7 @@ class _IndividualPageState extends State<IndividualPage> {
                   radius: 20,
                   backgroundColor: AppColors.secondary,
                   child: Icon(
-                    widget.chatmodel.icon.icon,
+                    widget.chatmodel.icon?.icon ?? Icons.person,
                     color: AppColors.background,
                     size: 33,
                   ),
@@ -95,14 +95,22 @@ class _IndividualPageState extends State<IndividualPage> {
               },
               itemBuilder: (context) => [
                 const PopupMenuItem(
-                  value: "New group",
-                  child: Text("New group"),
+                  value: "View Contact",
+                  child: Text("View Contact"),
                 ),
                 const PopupMenuItem(
-                  value: "Starred messages",
-                  child: Text("Starred messages"),
+                  value: "Media links and docs",
+                  child: Text("Media links and docs"),
                 ),
-                const PopupMenuItem(value: "Settings", child: Text("Settings")),
+                const PopupMenuItem(value: "Search", child: Text("Search")),
+                const PopupMenuItem(
+                  value: "Mute Notification",
+                  child: Text("Mute Notification"),
+                ),
+                const PopupMenuItem(
+                  value: "Wallpaper",
+                  child: Text("Wallpaper"),
+                ),
               ],
             ),
           ],
@@ -153,7 +161,13 @@ class _IndividualPageState extends State<IndividualPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        backgroundColor: AppColors.secondary,
+                                        context: context,
+                                        builder: (builder) => bottomsheet(),
+                                      );
+                                    },
                                     icon: Icon(Icons.attach_file),
                                   ),
                                   IconButton(
@@ -190,6 +204,85 @@ class _IndividualPageState extends State<IndividualPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget bottomsheet() {
+    return Container(
+      height: 278,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        margin: EdgeInsets.all(18),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconcreation(
+                    Icons.insert_drive_file,
+                    Color.fromARGB(255, 90, 134, 255),
+                    "Document",
+                  ),
+                  SizedBox(width: 70),
+                  iconcreation(
+                    Icons.camera_alt,
+                    Color.fromARGB(255, 230, 99, 191),
+                    "Camera",
+                  ),
+                  SizedBox(width: 70),
+                  iconcreation(
+                    Icons.insert_photo,
+                    Color.fromARGB(255, 137, 109, 249),
+                    "Gallery",
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconcreation(
+                    Icons.headset,
+                    Color.fromARGB(255, 255, 212, 55),
+                    "Audio",
+                  ),
+                  SizedBox(width: 70),
+                  iconcreation(
+                    Icons.location_pin,
+                    Color.fromARGB(255, 230, 99, 99),
+                    "Location",
+                  ),
+                  SizedBox(width: 70),
+                  iconcreation(
+                    Icons.person,
+                    Color.fromARGB(255, 109, 195, 249),
+                    "Contact",
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget iconcreation(IconData icon, Color color, String text) {
+    return InkWell(
+      onTap: () {},
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: color,
+            child: Icon(icon, size: 29, color: AppColors.background),
+          ),
+          SizedBox(height: 5),
+          Text(text, style: TextStyle(fontSize: 12)),
+        ],
       ),
     );
   }
