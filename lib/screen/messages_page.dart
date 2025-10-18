@@ -19,7 +19,7 @@ class _MessagePageState extends State<MessagePage>
   @override
   void initState() {
     super.initState();
-    _tabcontroller = TabController(length: 4, vsync: this, initialIndex: 0);
+    _tabcontroller = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
@@ -67,8 +67,6 @@ class _MessagePageState extends State<MessagePage>
         children: [
           CameraScreen(),
           Chatpage(),
-          Text("Notification"),
-          Text("Calls"),
         ],
       ),
     );
