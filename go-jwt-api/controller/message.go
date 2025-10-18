@@ -42,9 +42,10 @@ func GetMessages(c *gin.Context) {
 	partner := c.Query("partner")
 
 	var msgs []orm.Message
+	// แก้ชื่อคอลัมน์ให้ตรงกับตารางจริง (ตัวพิมพ์เล็ก)
 	if err := orm.Db.
-		Where("(SenderID = ? AND ReceiverID = ?) OR (SenderID = ? AND ReceiverID = ?)", user, partner, partner, user).
-		Order("CreatedAt asc").
+		Where("(sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?)", user, partner, partner, user).
+		Order("time asc").
 		Find(&msgs).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
