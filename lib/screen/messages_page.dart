@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:nectflowproject/screen/camerascreen.dart';
 import '../app_colors.dart';
 import 'package:nectflowproject/pages/chatpages.dart';
 
@@ -58,15 +59,13 @@ class _MessagePageState extends State<MessagePage>
           tabs: const [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(text: "Chats"),
-            Tab(text: "Notifications"),
-            Tab(text: "Calls"),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabcontroller,
         children: [
-          Text("Camera"),
+          CameraScreen(),
           Chatpage(),
           Text("Notification"),
           Text("Calls"),

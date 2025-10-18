@@ -1,5 +1,4 @@
-
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_is_empty
 
 import 'package:flutter/material.dart';
 import 'package:nectflowproject/app_colors.dart';
@@ -62,49 +61,61 @@ class _CreateGroupState extends State<CreateGroup> {
       body: Stack(
         children: [
           ListView.builder(
-            itemCount: contacts.length,
+            itemCount: contacts.length + 1,
             itemBuilder: (context, index) {
+              if (index == 0) {
+                return Container(height: groups.length > 0 ? 90 : 10);
+              }
               return InkWell(
                 onTap: () {
-                  if (contacts[index].select == false) {
+                  if (contacts[index].select == true) {
                     setState(() {
-                      contacts[index].select == true;
-                      groups.add(contacts[index]);
+                      groups.remove(contacts[index - 1]);
+                      contacts[index - 1].select = false;
                     });
                   } else {
                     setState(() {
-                      contacts[index].select == false;
-                      groups.remove(contacts[index]);
+                      groups.add(contacts[index - 1]);
+                      contacts[index - 1].select = true;
                     });
                   }
                 },
-                child: ContactCard(contact: contacts[index]),
+                child: ContactCard(contact: contacts[index - 1]),
               );
             },
           ),
-          Column(
-            children: [
-              Container(
-                height: 76,
-                color: AppColors.background,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: contacts.length,
-                  itemBuilder: (context, index) {
-                    if (contacts[index].select == true) {
-                      return AvatarCard(contact: contacts[index]);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ),
-              Divider(thickness: 1, height: 1),
-            ],
-          ),
+          groups.length > 0
+              ? Column(
+                  children: [
+                    Container(
+                      height: 76,
+                      color: AppColors.background,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: contacts.length,
+                        itemBuilder: (context, index) {
+                          if (contacts[index].select == true) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  groups.remove(contacts[index]);
+                                  contacts[index].select = false;
+                                });
+                              },
+                              child: AvatarCard(contact: contacts[index]),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    ),
+                    Divider(thickness: 1, height: 1),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );
   }
 }
-
