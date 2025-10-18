@@ -5,7 +5,15 @@ import 'package:nectflowproject/screen/individualpage.dart';
 
 class CustomCard extends StatelessWidget {
   final Chatmodel chatmodel;
-  const CustomCard({super.key, required this.chatmodel});
+  final String currentUserId;
+  final String receiverId;
+  
+  const CustomCard({
+    super.key, 
+    required this.chatmodel,
+    this.currentUserId = 'US0001',
+    this.receiverId = 'US0003',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +22,11 @@ class CustomCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => IndividualPage(chatmodel: chatmodel),
+            builder: (_) => IndividualPage(
+              chatmodel: chatmodel, 
+              currentUserId: currentUserId,
+              receiverId: receiverId, 
+            ),
           ),
         );
       },
@@ -41,9 +53,12 @@ class CustomCard extends StatelessWidget {
               children: [
                 const Icon(Icons.done_all, size: 18),
                 const SizedBox(width: 3),
-                Text(
-                  chatmodel.currentMessage ?? '', 
-                  style: const TextStyle(fontSize: 13),
+                Expanded(
+                  child: Text(
+                    chatmodel.currentMessage ?? '', 
+                    style: const TextStyle(fontSize: 13),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),

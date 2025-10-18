@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	MessageController "golang/nectflow-api/controller"
 	AuthController "golang/nectflow-api/controller/auth"
 	"golang/nectflow-api/orm"
 	"time"
@@ -27,6 +28,8 @@ func main() {
 
 	r.POST("/register", AuthController.Register)
 	r.POST("/login", AuthController.Login)
+	r.POST("/send-message", MessageController.SendMessage)
+	r.GET("/messages", MessageController.GetMessages)
 
 	fmt.Println("Server running on :8080")
 	r.Run(":8080")

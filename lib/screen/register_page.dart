@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController displayNameController = TextEditingController(); // สำหรับ profile display name
+  final TextEditingController displayNameController = TextEditingController();
 
   String selectedRoleID = 'RO0002'; // default role
 
@@ -42,8 +42,8 @@ class _RegisterPageState extends State<RegisterPage> {
           "phone_number": phoneController.text,
           "email": emailController.text,
           "password": passwordController.text,
-          "display_name": displayNameController.text, // ชื่อที่แสดงในโปรไฟล์
-          "role_id": selectedRoleID,                  // บทบาท
+          "display_name": displayNameController.text, 
+          "role_id": selectedRoleID,                
           "profile_path": "",
         }),
       );
