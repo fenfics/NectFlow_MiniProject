@@ -7,9 +7,9 @@ class CustomCard extends StatelessWidget {
   final Chatmodel chatmodel;
   final String currentUserId;
   final String receiverId;
-  
+
   const CustomCard({
-    super.key, 
+    super.key,
     required this.chatmodel,
     this.currentUserId = 'US0022',
     this.receiverId = 'US0019',
@@ -23,9 +23,9 @@ class CustomCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => IndividualPage(
-              chatmodel: chatmodel, 
+              chatmodel: chatmodel,
               currentUserId: currentUserId,
-              receiverId: receiverId, 
+              receiverId: receiverId,
             ),
           ),
         );
@@ -37,17 +37,14 @@ class CustomCard extends StatelessWidget {
               backgroundColor: AppColors.secondary,
               radius: 25,
               child: Icon(
-                chatmodel.icon?.icon ?? Icons.person, 
+                chatmodel.icon?.icon ?? Icons.person,
                 color: AppColors.darkGreen,
                 size: 33,
               ),
             ),
             title: Text(
               chatmodel.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             subtitle: Row(
               children: [
@@ -55,14 +52,14 @@ class CustomCard extends StatelessWidget {
                 const SizedBox(width: 3),
                 Expanded(
                   child: Text(
-                    chatmodel.currentMessage ?? '', 
+                    chatmodel.currentMessage ?? '',
                     style: const TextStyle(fontSize: 13),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-            trailing: Text(chatmodel.time ?? ''), 
+            trailing: Text(chatmodel.time ?? ''),
           ),
           const Padding(
             padding: EdgeInsets.only(right: 20, left: 80),

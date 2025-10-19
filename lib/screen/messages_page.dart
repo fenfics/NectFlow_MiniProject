@@ -12,8 +12,7 @@ class MessagePage extends StatefulWidget {
   _MessagePageState createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage>
-    with SingleTickerProviderStateMixin {
+class _MessagePageState extends State<MessagePage> with SingleTickerProviderStateMixin {
   late TabController _tabcontroller;
 
   @override
@@ -64,10 +63,7 @@ class _MessagePageState extends State<MessagePage>
       ),
       body: TabBarView(
         controller: _tabcontroller,
-        children: [
-          CameraScreen(),
-          Chatpage(),
-        ],
+        children: [CameraScreen(), Chatpage()],
       ),
     );
   }

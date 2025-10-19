@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, avoid_print, use_build_context_synchronously
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +10,10 @@ import 'dart:convert';
 class IndividualPage extends StatefulWidget {
   final Chatmodel chatmodel;
   final String currentUserId;
-  final String receiverId; 
-  
+  final String receiverId;
+
   const IndividualPage({
-    super.key, 
+    super.key,
     required this.chatmodel,
     required this.currentUserId,
     required this.receiverId,
@@ -31,12 +31,12 @@ class _IndividualPageState extends State<IndividualPage> {
   List<Map<String, dynamic>> messages = [];
   bool isLoading = true;
   ScrollController scrollController = ScrollController();
-  
+
   @override
   void initState() {
     super.initState();
     loadMessages();
-    
+
     focusnode.addListener(() {
       if (focusnode.hasFocus) {
         setState(() {
@@ -52,9 +52,9 @@ class _IndividualPageState extends State<IndividualPage> {
     });
 
     final url = Uri.parse(
-      'http://localhost:8080/messages?user=${widget.currentUserId}&partner=${widget.receiverId}'
+      'http://localhost:8080/messages?user=${widget.currentUserId}&partner=${widget.receiverId}',
     );
-    
+
     try {
       final response = await http.get(url);
 
@@ -64,14 +64,16 @@ class _IndividualPageState extends State<IndividualPage> {
           messages = data.cast<Map<String, dynamic>>();
           isLoading = false;
         });
-        
-        // เลื่อนลงล่างสุด
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (scrollController.hasClients) {
             scrollController.jumpTo(scrollController.position.maxScrollExtent);
           }
         });
       } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Fail loading')));
         setState(() {
           isLoading = false;
         });
@@ -84,20 +86,19 @@ class _IndividualPageState extends State<IndividualPage> {
     }
   }
 
-  // ส่งข้อความ
   Future<void> sendMessage() async {
     if (messageController.text.trim().isEmpty) {
       return;
     }
 
     final messageText = messageController.text.trim();
-    
+
     setState(() {
       isSending = true;
     });
 
     final url = Uri.parse('http://localhost:8080/send-message');
-    
+
     try {
       final response = await http.post(
         url,
@@ -111,17 +112,16 @@ class _IndividualPageState extends State<IndividualPage> {
 
       if (response.statusCode == 200) {
         messageController.clear();
-        // โหลดข้อความใหม่
         await loadMessages();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Fail sending')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Fail sending')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('error: $e')));
     } finally {
       setState(() {
         isSending = false;
@@ -194,14 +194,20 @@ class _IndividualPageState extends State<IndividualPage> {
               actions: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.video_call, color: AppColors.background),
+                  icon: const Icon(
+                    Icons.video_call,
+                    color: AppColors.background,
+                  ),
                 ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.call, color: AppColors.background),
                 ),
                 PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: AppColors.background),
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: AppColors.background,
+                  ),
                   onSelected: (value) {
                     print(value);
                   },
@@ -229,53 +235,50 @@ class _IndividualPageState extends State<IndividualPage> {
                   child: isLoading
                       ? Center(child: CircularProgressIndicator())
                       : messages.isEmpty
-                          ? Center(
-                              child: Text(
-                                'empty message\n',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
+                      ? Center(
+                          child: Text(
+                            'empty message\n',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
+                        )
+                      : ListView.builder(
+                          controller: scrollController,
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            final msg = messages[index];
+                            final isMe =
+                                msg['SenderID'] == widget.currentUserId;
+
+                            return Align(
+                              alignment: isMe
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal: 10,
+                                ),
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: isMe ? AppColors.accent : Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                child: Text(
+                                  msg['Message'] ?? '',
+                                  style: TextStyle(
+                                    color: isMe ? Colors.white : Colors.black87,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
-                            )
-                          : ListView.builder(
-                              controller: scrollController,
-                              itemCount: messages.length,
-                              itemBuilder: (context, index) {
-                                final msg = messages[index];
-                                final isMe = msg['SenderID'] == widget.currentUserId;
-                                
-                                return Align(
-                                  alignment: isMe 
-                                      ? Alignment.centerRight 
-                                      : Alignment.centerLeft,
-                                  child: Container(
-                                    margin: EdgeInsets.symmetric(
-                                      vertical: 5, 
-                                      horizontal: 10
-                                    ),
-                                    padding: EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: isMe 
-                                          ? AppColors.accent 
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    constraints: BoxConstraints(
-                                      maxWidth: MediaQuery.of(context).size.width * 0.7,
-                                    ),
-                                    child: Text(
-                                      msg['Message'] ?? '',
-                                      style: TextStyle(
-                                        color: isMe ? Colors.white : Colors.black87,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                            );
+                          },
+                        ),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -287,7 +290,11 @@ class _IndividualPageState extends State<IndividualPage> {
                           Container(
                             width: MediaQuery.of(context).size.width - 55,
                             child: Card(
-                              margin: EdgeInsets.only(left: 2, right: 2, bottom: 8),
+                              margin: EdgeInsets.only(
+                                left: 2,
+                                right: 2,
+                                bottom: 8,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
@@ -342,16 +349,19 @@ class _IndividualPageState extends State<IndividualPage> {
                               backgroundColor: AppColors.accent,
                               child: IconButton(
                                 onPressed: isSending ? null : sendMessage,
-                                icon: isSending 
-                                  ? SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
+                                icon: isSending
+                                    ? SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.background,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.send,
                                         color: AppColors.background,
-                                        strokeWidth: 2,
                                       ),
-                                    )
-                                  : Icon(Icons.send, color: AppColors.background),
                               ),
                             ),
                           ),

@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ส่งข้อความ
 func SendMessage(c *gin.Context) {
 	var input struct {
 		SenderID   string `json:"sender"`
@@ -36,13 +35,11 @@ func SendMessage(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Message sent"})
 }
 
-// ดึงข้อความทั้งหมดระหว่างผู้ใช้ 2 คน
 func GetMessages(c *gin.Context) {
 	user := c.Query("user")
 	partner := c.Query("partner")
 
 	var msgs []orm.Message
-	// แก้ชื่อคอลัมน์ให้ตรงกับตารางจริง (ตัวพิมพ์เล็ก)
 	if err := orm.Db.
 		Where("(sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?)", user, partner, partner, user).
 		Order("time asc").
