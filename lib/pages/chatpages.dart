@@ -71,7 +71,7 @@ class _ChatpageState extends State<Chatpage> {
         itemCount: chats.length,
         itemBuilder: (context, index) => CustomCard(
           chatmodel: chats[index],
-          currentUserId: 'US0022', 
+          currentUserId: 'US0023', 
           receiverId: 'US0019', 
         ),
       ),

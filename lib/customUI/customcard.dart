@@ -11,7 +11,7 @@ class CustomCard extends StatelessWidget {
   const CustomCard({
     super.key,
     required this.chatmodel,
-    this.currentUserId = 'US0022',
+    this.currentUserId = 'US0023',
     this.receiverId = 'US0019',
   });
 
