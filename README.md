@@ -1,6 +1,6 @@
 # nectflowproject
 
-A new Flutter project.
+DormConnect is an all-in-one communication and community management platform designed specifically for dormitories and apartment buildings. It provides a dedicated, private space for residents to connect, communicate, and solve issues efficiently, while giving building managers the tools to foster a positive living environment.
 
 ## Getting Started
 
